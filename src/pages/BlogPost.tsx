@@ -70,7 +70,7 @@ const BlogPost = () => {
       {/* Render Banner Image Before Title */}
       {post.banner && (
         <div>
-          <img src={post.banner} alt="Banner" className="w-full h-48" />
+          <img src={post.banner} alt="Banner" className="w-full" />
         </div>
       )}
 
