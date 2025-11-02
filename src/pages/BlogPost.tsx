@@ -11,11 +11,13 @@ import { NotionRenderer } from "react-notion-x";
 import { Code } from "react-notion-x/build/third-party/code";
 // Optional: add more renderers if needed
 // import { Collection } from "react-notion-x/build/third-party/collection";
-// import { Equation } from "react-notion-x/build/third-party/equation";
+import { Equation } from "react-notion-x/build/third-party/equation";
 
 import "react-notion-x/src/styles.css";
-// import "prismjs/themes/prism.css";
-// import "katex/dist/katex.min.css";
+// used for code syntax highlighting (optional)
+import 'prismjs/themes/prism-tomorrow.css'
+// used for rendering equations (optional)
+import 'katex/dist/katex.min.css'
 
 interface Post {
   id: string;
@@ -56,7 +58,6 @@ const BlogPost = () => {
         setLoading(false);
       }
     };
-
     fetchPost();
   }, [slug]);
 
@@ -124,7 +125,7 @@ const BlogPost = () => {
                       fullPage={false}
                       components={{
                         Code, // enable code block rendering
-                        // Equation,
+                        Equation, // Use only MathML
                         // Collection,
                       }}
                       className="text-foreground"
