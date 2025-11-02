@@ -12,9 +12,9 @@ import { Code } from "react-notion-x/build/third-party/code";
 import { Equation } from "react-notion-x/build/third-party/equation";
 import "react-notion-x/src/styles.css";
 // used for code syntax highlighting (optional)
-import 'prismjs/themes/prism-tomorrow.css';
+import "prismjs/themes/prism-tomorrow.css";
 // used for rendering equations (optional)
-import 'katex/dist/katex.min.css';
+import "katex/dist/katex.min.css";
 
 interface Post {
   id: string;
@@ -67,8 +67,14 @@ const BlogPost = () => {
   return (
     <div className="min-h-screen bg-background font-sans">
       <Header />
+      {/* Render Banner Image Before Title */}
+      {post.banner && (
+        <div>
+          <img src={post.banner} alt="Banner" className="w-full h-48" />
+        </div>
+      )}
 
-      <main className="pt-16 pb-16 flex justify-center px-4 sm:px-6">
+      <main className="pt-0 pb-16 flex justify-center px-4 sm:px-6">
         <div className="flex flex-col lg:flex-row max-w-7xl w-full mt-8 gap-12">
           {/* Main Content */}
           <div className="flex-1">
@@ -81,13 +87,6 @@ const BlogPost = () => {
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to Blog
                 </Link>
-
-                {/* Render Banner Image Before Title */}
-                {post.banner && (
-                  <div className="mb-8">
-                    <img src={post.banner} alt="Banner" className="w-full" />
-                  </div>
-                )}
 
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
