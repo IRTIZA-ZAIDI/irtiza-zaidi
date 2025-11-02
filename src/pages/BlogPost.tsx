@@ -93,7 +93,7 @@ const BlogPost = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
                 >
-                  <h1 className="font-serif text-4xl text-foreground mb-6">
+                  <h1 className="font-serif text-3xl sm:text-4xl text-foreground mb-6">
                     {post.title}
                   </h1>
 
@@ -116,7 +116,7 @@ const BlogPost = () => {
                     </div>
                   </div>
 
-                  <p className="font-sans text-lg text-muted-foreground leading-relaxed">
+                  <p className="font-sans text-sm sm:text-lg text-muted-foreground leading-relaxed">
                     {post.excerpt}
                   </p>
                   <hr className="my-8 border-t border-border" />
@@ -132,11 +132,12 @@ const BlogPost = () => {
                         Code: (props) => (
                           <Code
                             {...props}
-                            className="notion-code" // Custom class for code block
+                            className="notion-code text-sm sm:text-base" // Smaller code text on small screens
                           />
                         ),
-                        Equation, // Use only MathML
-                        // Collection,
+                        Equation: (props) => (
+                          <Equation {...props} className="text-sm sm:text-base" /> // Smaller equations on small screens
+                        ),
                       }}
                       className="text-foreground"
                     />
