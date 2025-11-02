@@ -12,9 +12,9 @@ import { Code } from "react-notion-x/build/third-party/code";
 import { Equation } from "react-notion-x/build/third-party/equation";
 import "react-notion-x/src/styles.css";
 // used for code syntax highlighting (optional)
-import 'prismjs/themes/prism-tomorrow.css'
+import 'prismjs/themes/prism-tomorrow.css';
 // used for rendering equations (optional)
-import 'katex/dist/katex.min.css'
+import 'katex/dist/katex.min.css';
 
 interface Post {
   id: string;
@@ -130,7 +130,12 @@ const BlogPost = () => {
                       recordMap={post.recordMap}
                       fullPage={false}
                       components={{
-                        Code, // enable code block rendering
+                        Code: (props) => (
+                          <Code
+                            {...props}
+                            className="notion-code" // Custom class for code block
+                          />
+                        ),
                         Equation, // Use only MathML
                         // Collection,
                       }}

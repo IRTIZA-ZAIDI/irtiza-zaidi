@@ -285,4 +285,11 @@ article.notion-content main {
   max-width: 100%;
 }
 
+/* Add this to your global CSS or a specific stylesheet */
+.notion-code {
+  white-space: pre-wrap !important; /* Allow code to wrap */
+  word-wrap: break-word !important; /* Break long words if needed */
+  overflow: hidden !important; /* Remove scroll */
+  min-height: 75px;
+}
 
