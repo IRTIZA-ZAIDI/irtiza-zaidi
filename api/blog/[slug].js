@@ -33,10 +33,13 @@ export default async function handler(req, res) {
     const page = dbResponse.results[0];
     const props = page.properties || {};
 
-    // 2. Get the full recordMap (blocks, code, paragraphs, etc.)
+    // 2. Extract the banner image from the "Banner" column
+    const banner = props.Banner?.files?.[0]?.file?.url || null;
+
+    // 3. Get the full recordMap (blocks, code, paragraphs, etc.)
     const recordMap = await unofficialNotion.getPage(page.id);
 
-    // 3. Return structured metadata + block content
+    // 4. Return structured metadata + block content along with the banner image URL
     return res.status(200).json({
       id: page.id,
       title: props.Title?.title?.[0]?.plain_text || "Untitled",
@@ -47,6 +50,7 @@ export default async function handler(req, res) {
         ? `${props["Read Time"].number} min read`
         : "",
       isNew: props.New?.checkbox || false,
+      banner: banner, // Add the banner image URL
       recordMap, // full block content (this includes your "hello world" code block)
     });
   } catch (error) {

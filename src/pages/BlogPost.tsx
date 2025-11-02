@@ -9,10 +9,7 @@ import ScrollAnimation from "@/components/ScrollAnimation";
 
 import { NotionRenderer } from "react-notion-x";
 import { Code } from "react-notion-x/build/third-party/code";
-// Optional: add more renderers if needed
-// import { Collection } from "react-notion-x/build/third-party/collection";
 import { Equation } from "react-notion-x/build/third-party/equation";
-
 import "react-notion-x/src/styles.css";
 // used for code syntax highlighting (optional)
 import 'prismjs/themes/prism-tomorrow.css'
@@ -27,6 +24,7 @@ interface Post {
   date: string;
   readTime?: string;
   slug: string;
+  banner: string | null; // Add banner field
 }
 
 const BlogPost = () => {
@@ -49,6 +47,7 @@ const BlogPost = () => {
           slug: data.slug,
           date: data.date,
           readTime: data.readTime,
+          banner: data.banner, // Add the banner URL
           recordMap: data.recordMap,
         });
       } catch (err) {
@@ -82,6 +81,13 @@ const BlogPost = () => {
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to Blog
                 </Link>
+
+                {/* Render Banner Image Before Title */}
+                {post.banner && (
+                  <div className="mb-8">
+                    <img src={post.banner} alt="Banner" className="w-full" />
+                  </div>
+                )}
 
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
