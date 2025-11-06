@@ -68,13 +68,13 @@ const BlogPost = () => {
     <div className="min-h-screen bg-background font-sans">
       <Header />
       {/* Render Banner Image Before Title */}
-      {post.banner && (
+      {/* {post.banner && (
         <div className="mt-20">
           <img src={post.banner} alt="Banner" className="w-full" />
         </div>
-      )}
+      )} */}
 
-      <main className="pt-0 pb-16 flex justify-center px-4 sm:px-6">
+      <main className="mt-20 pt-0 pb-16 flex justify-center px-4 sm:px-6">
         <div className="flex flex-col lg:flex-row max-w-7xl w-full mt-8 gap-12">
           {/* Main Content */}
           <div className="flex-1">
