@@ -1,7 +1,11 @@
-// pages/api/blog/[slug].js (or src/pages/api/blog/[slug].ts with tweaks)
+// pages/api/blog/[slug].js
 
 import { Client } from "@notionhq/client";
 import { NotionAPI } from "notion-client";
+
+export const config = {
+  runtime: "nodejs",
+};
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const dbId = process.env.NOTION_DATABASE_ID;
@@ -15,6 +19,12 @@ const unofficial = new NotionAPI({
 });
 
 export default async function handler(req, res) {
+  // 🔥 HARD DISABLE CACHING (THIS FIXES YOUR ISSUE)
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+  res.removeHeader("ETag");
+
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -25,7 +35,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 1) Find page via database + slug
+    // 1️⃣ Find page via database + slug
     const dbResp = await notion.databases.query({
       database_id: dbId,
       filter: {
@@ -42,7 +52,7 @@ export default async function handler(req, res) {
     const page = dbResp.results[0];
     const props = page.properties;
 
-    // 2) Get full recordMap for this page
+    // 2️⃣ Fetch full recordMap (unofficial API)
     const recordMap = await unofficial.getPage(page.id);
 
     console.log(
