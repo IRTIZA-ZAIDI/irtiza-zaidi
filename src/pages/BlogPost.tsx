@@ -105,19 +105,11 @@ const BlogPost = () => {
 
       {banner && (
         <div className="mt-20 w-full">
-          <div
-            style={{
-              width: "100%",
-              height: "160px",
-              overflow: "hidden",
-              position: "relative",
-              borderRadius: "8px",
-            }}
-          >
+          <div className="relative w-full aspect-[1500/200] rounded-lg overflow-hidden bg-muted">
             <img
               src={banner}
               alt="Banner"
-              className="absolute inset-0 w-full h-full object-cover"
+              className="w-full h-full object-contain"
               loading="lazy"
             />
           </div>

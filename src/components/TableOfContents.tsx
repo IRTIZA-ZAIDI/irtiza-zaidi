@@ -14,7 +14,10 @@ interface TableOfContentsProps {
 
 const NAVBAR_OFFSET = -90;
 
-const TableOfContents = ({ containerSelector, recordMap }: TableOfContentsProps) => {
+const TableOfContents = ({
+  containerSelector,
+  recordMap,
+}: TableOfContentsProps) => {
   const [toc, setToc] = useState<TOCItem[]>([]);
   const [activeId, setActiveId] = useState<string>("");
   const [isOverflowing, setIsOverflowing] = useState(false);
@@ -31,24 +34,28 @@ const TableOfContents = ({ containerSelector, recordMap }: TableOfContentsProps)
 
       const list: TOCItem[] = [];
 
-      container.querySelectorAll(".notion-h1, .notion-h2, .notion-h3").forEach((el) => {
-        const t = el.querySelector(".notion-h-title");
-        if (!t) return;
+      container
+        .querySelectorAll(".notion-h1, .notion-h2, .notion-h3")
+        .forEach((el) => {
+          const t = el.querySelector(".notion-h-title");
+          if (!t) return;
 
-        const text = t.textContent || "";
-        const level = el.classList.contains("notion-h1")
-          ? 1
-          : el.classList.contains("notion-h2")
-          ? 2
-          : 3;
+          const text = t.textContent || "";
+          const level = el.classList.contains("notion-h1")
+            ? 1
+            : el.classList.contains("notion-h2")
+            ? 2
+            : 3;
 
-        const id =
-          text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") ||
-          crypto.randomUUID();
+          const id =
+            text
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/^-|-$/g, "") || crypto.randomUUID();
 
-        (el as HTMLElement).id = id;
-        list.push({ id, text, level });
-      });
+          (el as HTMLElement).id = id;
+          list.push({ id, text, level });
+        });
 
       setToc(list);
     }, 250);
@@ -131,78 +138,65 @@ const TableOfContents = ({ containerSelector, recordMap }: TableOfContentsProps)
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: -16 }}
+      initial={{ opacity: 0, x: -12 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.25 }}
-      className="sticky top-24 relative"
+      className="sticky top-24"
     >
-      <h3 className="font-sans text-lg font-semibold mb-3">On This Page</h3>
+      <h3 className="font-sans text-lg font-medium text-muted-foreground mb-4">
+        On this page
+      </h3>
 
-      {/* Scrollable list */}
       <div
         ref={wrapperRef}
         className="
-          relative
-          overflow-y-auto overflow-x-hidden
-          max-h-[calc(100vh-9rem)]
-          pr-2
-          pt-4
-          pb-24
-          bg-background
-        "
+        relative
+        max-h-[calc(100vh-10rem)]
+        overflow-y-auto
+        pr-3
+        space-y-1
+      "
         style={{ scrollbarWidth: "none" }}
       >
-        {/* TOP fade (inside scrollable area) */}
-        {isOverflowing && (
-          <div
-            className="
-              pointer-events-none
-              absolute top-0 left-0 right-0
-              h-12
-              bg-gradient-to-b from-background to-transparent
-              z-20
-            "
-          />
-        )}
-
-        <nav className="space-y-1 relative z-10">
+        <nav>
           {toc.map(({ id, text, level }) => {
             const isActive = activeId === id;
+
             return (
               <div
                 key={id}
                 ref={(el) => (itemsRef.current[id] = el)}
                 onClick={() => jump(id)}
                 className={`
-                  cursor-pointer relative leading-tight py-0.5 text-sm transition-colors
-                  ${isActive ? "text-accent font-semibold" : "text-muted-foreground hover:text-accent"}
-                  ${level === 1 ? "mt-3 mb-1 ml-0 font-semibold text-foreground" : ""}
-                  ${level === 2 ? "ml-3" : ""}
-                  ${level === 3 ? "ml-6" : ""}
-                `}
+  relative cursor-pointer leading-snug py-1 text-sm
+  transition-colors
+  ${
+    isActive
+      ? "text-accent font-medium"
+      : "text-muted-foreground hover:text-blue-500"
+  }
+  ${
+    level === 1 && !isActive
+      ? "mt-2 font-medium text-foreground"
+      : level === 1
+      ? "mt-2"
+      : ""
+  }
+  ${level === 2 ? "ml-3" : ""}
+  ${level === 3 ? "ml-6 text-xs" : ""}
+`}
               >
+                {/* Active vertical bar */}
                 {isActive && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 h-3 w-[2px] bg-accent rounded-full" />
+                  <span className="absolute -left-3 top-1 h-4 w-[2px] bg-accent rounded-full" />
                 )}
+
                 <span className="select-none">{text}</span>
               </div>
             );
           })}
         </nav>
       </div>
-
-      {/* FIXED BOTTOM FADE — sticks to bottom of sidebar */}
-      {isOverflowing && (
-        <div
-          className="
-            pointer-events-none
-            absolute bottom-0 left-0 right-0
-            h-24
-            bg-gradient-to-t from-background to-transparent
-            z-30
-          "
-        />
-      )}
     </motion.div>
   );
 };

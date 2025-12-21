@@ -8,36 +8,48 @@
 @layer base {
   :root {
     /* Clean crisp light mode with bright blue accent */
-    --background: 0 0% 100%;          /* Pure white */
-    --foreground: 230 15% 10%;        /* Very dark gray */
+    --background: 0 0% 100%;
+    /* Pure white */
+    --foreground: 230 15% 10%;
+    /* Very dark gray */
 
-    --card: 210 20% 98%;              /* Soft off-white */
+    --card: 210 20% 98%;
+    /* Soft off-white */
     --card-foreground: 230 15% 10%;
 
     --popover: 210 20% 98%;
     --popover-foreground: 230 15% 10%;
 
-    --primary: 230 15% 10%;           /* Dark text */
+    --primary: 230 15% 10%;
+    /* Dark text */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 5% 45%;          /* Light gray for subtle elements */
+    --secondary: 240 5% 45%;
+    /* Light gray for subtle elements */
     --secondary-foreground: 230 15% 10%;
 
-    --muted: 210 10% 95%;             /* Muted background areas */
+    --muted: 210 10% 95%;
+    /* Muted background areas */
     --muted-foreground: 240 5% 50%;
 
-    --accent: 214 90% 63%;            /* Bright azure / cerulean blue */
+    --accent: 214 90% 63%;
+    /* Bright azure / cerulean blue */
     --accent-foreground: 0 0% 100%;
 
-    --accent-warm: 24 90% 56%;        /* Warm coral/orange for contrast */
+    --accent-warm: 24 90% 56%;
+    /* Warm coral/orange for contrast */
     --accent-warm-foreground: 230 15% 10%;
 
-    --destructive: 0 75% 47%;         /* Red destructive */
+    --destructive: 0 75% 47%;
+    /* Red destructive */
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 20% 91%;            /* Light gray border */
-    --input: 210 20% 91%;             /* Input background */
-    --ring: 214 90% 63%;              /* Focus ring matches accent */
+    --border: 210 20% 91%;
+    /* Light gray border */
+    --input: 210 20% 91%;
+    /* Input background */
+    --ring: 214 90% 63%;
+    /* Focus ring matches accent */
 
     --radius: 0.375rem;
 
@@ -64,39 +76,51 @@
     --shadow-soft: 0 1px 3px 0 hsl(230 15% 10% / 0.08), 0 1px 2px 0 hsl(230 15% 10% / 0.05);
     --shadow-medium: 0 4px 6px -1px hsl(230 15% 10% / 0.08), 0 2px 4px -1px hsl(230 15% 10% / 0.05);
   }
-.dark {
-  --background: 222 15% 5%;        /* darker black */
-  --foreground: 50 100% 97%;       /* keep text bright */
 
-  --card: 222 14% 8%;               /* darker card */
-  --card-foreground: 50 100% 97%;
+  .dark {
+    --background: 222 15% 5%;
+    /* darker black */
+    --foreground: 50 100% 97%;
+    /* keep text bright */
 
-  --popover: 222 14% 8%;            /* darker popover */
-  --popover-foreground: 50 100% 97%;
+    --card: 222 14% 8%;
+    /* darker card */
+    --card-foreground: 50 100% 97%;
 
-  --primary: 0 0% 100%;
-  --primary-foreground: 222 15% 5%;
+    --popover: 222 14% 8%;
+    /* darker popover */
+    --popover-foreground: 50 100% 97%;
 
-  --secondary: 280 65% 50%;         /* slightly dimmer secondary */
-  --secondary-foreground: 50 100% 97%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 222 15% 5%;
 
-  --muted: 222 10% 12%;             /* darker muted background */
-  --muted-foreground: 222 10% 60%;
+    --secondary: 280 65% 50%;
+    /* slightly dimmer secondary */
+    --secondary-foreground: 50 100% 97%;
 
-  --accent: 340 80% 65%;            /* keep accent same */
-  --accent-foreground: 50 100% 97%;
-  
+    --muted: 222 10% 12%;
+    /* darker muted background */
+    --muted-foreground: 222 10% 60%;
 
-  --accent-warm: 45 90% 60%;        /* keep warm accent same */
-  --accent-warm-foreground: 222 15% 5%;
+    --accent: 340 80% 65%;
+    /* keep accent same */
+    --accent-foreground: 50 100% 97%;
 
-  --destructive: 0 75% 45%;         /* slightly darker */
-  --destructive-foreground: 50 100% 97%;
 
-  --border: 222 10% 16%;            /* darker border */
-  --input: 222 10% 16%;             /* darker input */
-  --ring: 190 90% 50%;
-}
+    --accent-warm: 45 90% 60%;
+    /* keep warm accent same */
+    --accent-warm-foreground: 222 15% 5%;
+
+    --destructive: 0 75% 45%;
+    /* slightly darker */
+    --destructive-foreground: 50 100% 97%;
+
+    --border: 222 10% 16%;
+    /* darker border */
+    --input: 222 10% 16%;
+    /* darker input */
+    --ring: 190 90% 50%;
+  }
 
 
 }
@@ -112,13 +136,19 @@
     line-height: var(--leading-relaxed);
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 600;
     line-height: 1.3;
   }
 
-  code, pre {
+  code,
+  pre {
     font-family: 'JetBrains Mono', 'Fira Code', monospace;
   }
 
@@ -152,6 +182,7 @@
 }
 
 @layer base {
+
   /* Fix: reset stuck hover/active state when navigating back/forward */
   body:focus-within {
     /* Ensures focus resets correctly */
@@ -168,6 +199,7 @@
 
 
 @layer components {
+
   /* Navigation styles */
   .nav-link {
     @apply text-muted-foreground hover:text-foreground transition-colors duration-200 relative;
@@ -182,7 +214,7 @@
     @apply scale-x-100;
   }
 
-  
+
   /* Content containers */
   .content-container {
     max-width: var(--content-width);
@@ -227,6 +259,7 @@
   from {
     width: 0;
   }
+
   to {
     width: 100%;
   }
@@ -244,21 +277,38 @@
   white-space: nowrap;
   overflow: hidden;
   font-family: monospace;
-  font-size: 1.125rem; /* text-lg */
-  border-right: 2px solid white; /* cursor */
+  font-size: 1.125rem;
+  /* text-lg */
+  border-right: 2px solid white;
+  /* cursor */
   animation: typing 5s steps(20, end) forwards, blink 0.7s step-end 5s 1;
 }
 
 /* Typing animation */
 @keyframes typing {
-  from { width: 0; }
-  to { width: 100%; border-right-color: transparent; } /* cursor disappears */
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+    border-right-color: transparent;
+  }
+
+  /* cursor disappears */
 }
 
 /* Blink during typing (optional) */
 @keyframes blink {
-  50% { border-right-color: transparent; }
-  100% { border-right-color: transparent; } /* ensure it stays hidden after animation */
+  50% {
+    border-right-color: transparent;
+  }
+
+  100% {
+    border-right-color: transparent;
+  }
+
+  /* ensure it stays hidden after animation */
 }
 
 /* Ensure Notion content aligns with container */
@@ -287,9 +337,46 @@ article.notion-content main {
 
 /* Add this to your global CSS or a specific stylesheet */
 .notion-code {
-  white-space: pre-wrap !important; /* Allow code to wrap */
-  word-wrap: break-word !important; /* Break long words if needed */
-  overflow: hidden !important; /* Remove scroll */
+  white-space: pre-wrap !important;
+  /* Allow code to wrap */
+  word-wrap: break-word !important;
+  /* Break long words if needed */
+  overflow: hidden !important;
+  /* Remove scroll */
   min-height: 75px;
 }
 
+.notion-asset-wrapper {
+  height: auto !important;
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.notion-content img {
+  object-fit: contain !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
+/* Fix react-notion-x dark mode */
+.dark .notion-content,
+.dark .notion-content p,
+.dark .notion-content span,
+.dark .notion-content li,
+.dark .notion-text,
+.dark .notion-quote {
+  color: rgb(229, 231, 235); /* gray-200 */
+}
+
+.dark .notion-simple-table {
+  color: rgb(229, 231, 235); /* gray-200 */
+  margin: 2rem;
+}
+
+.dark .notion-content h1,
+.dark .notion-content h2,
+.dark .notion-content h3,
+.dark .notion-content h4 {
+  color: white;
+}
