@@ -24,51 +24,32 @@ interface Post {
   banner: string | null;
 }
 
-const MAX_BLOCKS = 100;
-
-function buildSafeSubset(recordMap: any, maxBlocks = MAX_BLOCKS) {
-  const fullBlocks = recordMap.block;
-  const rootId = Object.keys(fullBlocks).find(
-    (id) => fullBlocks[id].value.type === "page"
-  );
-
-  if (!rootId) return recordMap;
-
-  const queue = [rootId];
-  const visited = new Set();
-  const subset: any = {};
-
-  while (queue.length && visited.size < maxBlocks) {
-    const id = queue.shift();
-    if (!id || visited.has(id) || !fullBlocks[id]) continue;
-
-    visited.add(id);
-    subset[id] = fullBlocks[id];
-
-    const children = fullBlocks[id].value?.content || [];
-    children.forEach((childId: string) => queue.push(childId));
-  }
-
-  return { ...recordMap, block: subset };
-}
-
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
+
   const [post, setPost] = useState<Post | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [extraLoading, setExtraLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!slug) return;
+
     const fetchPost = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
         const res = await fetch(`/api/blog/${slug}`);
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
 
         const data = await res.json();
 
-        const firstMap = buildSafeSubset(data.recordMap, MAX_BLOCKS);
-        const fullMap = data.recordMap;
+        console.log(
+          "🔥 FULL RECORDMAP BLOCK COUNT FROM BACKEND:",
+          Object.keys(data.recordMap?.block || {}).length
+        );
 
         setPost({
           id: data.id,
@@ -78,23 +59,11 @@ const BlogPost = () => {
           date: data.date,
           readTime: data.readTime,
           banner: data.banner,
-          recordMap: firstMap,
+          recordMap: data.recordMap, // FULL recordMap, no slicing
         });
-
-        setTimeout(() => {
-          setPost((prev) =>
-            prev
-              ? {
-                  ...prev,
-                  recordMap: fullMap,
-                }
-              : prev
-          );
-          setExtraLoading(false);
-        }, 500);
-      } catch (err) {
-        console.error(err);
-        setError(err instanceof Error ? err.message : "Failed to fetch post");
+      } catch (err: any) {
+        console.error("❌ FETCH ERROR:", err);
+        setError(err?.message || "Failed to fetch post");
       } finally {
         setLoading(false);
       }
@@ -103,15 +72,38 @@ const BlogPost = () => {
     fetchPost();
   }, [slug]);
 
-  if (loading) return <p className="text-center mt-10">Loading post...</p>;
-  if (error) return <p className="text-center mt-10 text-red-500">Error: {error}</p>;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background font-sans">
+        <Header />
+        <p className="text-center mt-20 text-muted-foreground">Loading post…</p>
+      </div>
+    );
+  }
+
+  if (error || !post) {
+    return (
+      <div className="min-h-screen bg-background font-sans">
+        <Header />
+        <p className="text-center mt-20 text-red-500">
+          Error: {error || "Post not found"}
+        </p>
+      </div>
+    );
+  }
+
+  const { banner, recordMap } = post;
+
+  console.log(
+    "🧩 FINAL RENDER BLOCK COUNT:",
+    Object.keys(recordMap?.block || {}).length
+  );
 
   return (
     <div className="min-h-screen bg-background font-sans">
       <Header />
 
-      {/* Banner */}
-      {post?.banner && (
+      {banner && (
         <div className="mt-20 w-full">
           <div
             style={{
@@ -123,7 +115,7 @@ const BlogPost = () => {
             }}
           >
             <img
-              src={post.banner}
+              src={banner}
               alt="Banner"
               className="absolute inset-0 w-full h-full object-cover"
               loading="lazy"
@@ -132,13 +124,16 @@ const BlogPost = () => {
         </div>
       )}
 
-      <main className="pb-16 flex justify-center px-4 sm:px-6">
+      <main
+        className={`pb-16 flex justify-center px-4 sm:px-6 ${
+          !banner ? "pt-16" : ""
+        }`}
+      >
+        {" "}
         <div className="flex flex-col lg:flex-row max-w-7xl w-full mt-8 gap-12">
-          
-          {/* Main Content */}
+          {/* MAIN CONTENT */}
           <div className="flex-1">
             <div className="wide-container p-1">
-
               <Link
                 to="/blog"
                 className="font-sans inline-flex items-center text-muted-foreground hover:text-accent mb-8"
@@ -148,14 +143,14 @@ const BlogPost = () => {
               </Link>
 
               <h1 className="font-serif text-3xl sm:text-4xl text-foreground mb-6">
-                {post?.title}
+                {post.title}
               </h1>
 
               <div className="flex flex-col sm:flex-row sm:items-center sm:gap-6 text-accent mb-6 font-sans">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   <span>
-                    {post?.date
+                    {post.date
                       ? new Date(post.date).toLocaleDateString("en-US", {
                           year: "numeric",
                           month: "long",
@@ -167,21 +162,23 @@ const BlogPost = () => {
 
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
-                  <span>{post?.readTime || "–"}</span>
+                  <span>{post.readTime || "–"}</span>
                 </div>
               </div>
 
               <p className="font-sans text-sm sm:text-lg text-muted-foreground leading-relaxed">
-                {post?.excerpt}
+                {post.excerpt}
               </p>
 
               <hr className="my-8 border-t border-border" />
 
-              {/* Notion Content */}
-              <article id="notion-container" className="notion-content">
-                {post?.recordMap && (
+              <article
+                id="notion-container"
+                className="notion-content text-foreground"
+              >
+                {recordMap && (
                   <NotionRenderer
-                    recordMap={post.recordMap}
+                    recordMap={recordMap}
                     fullPage={false}
                     components={{
                       Code: (props) => <Code {...props} />,
@@ -189,15 +186,8 @@ const BlogPost = () => {
                     }}
                   />
                 )}
-
-                {extraLoading && (
-                  <p className="text-center text-muted-foreground my-6">
-                    Loading full article...
-                  </p>
-                )}
               </article>
 
-              {/* Navigation */}
               <div className="content-container mt-16 pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
                 <Link
                   to="/blog"
@@ -210,20 +200,18 @@ const BlogPost = () => {
                   Share this post
                 </div>
               </div>
-
             </div>
           </div>
 
-          {/* Table of Contents */}
+          {/* TOC SIDEBAR */}
           <aside className="w-60 hidden lg:block flex-shrink-0">
             <div className="sticky top-20 max-h-[calc(100vh-5rem)] px-4 py-2 border-l border-border">
               <TableOfContents
                 containerSelector="#notion-container"
-                recordMap={post?.recordMap}
+                recordMap={recordMap}
               />
             </div>
           </aside>
-
         </div>
       </main>
     </div>

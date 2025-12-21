@@ -1,11 +1,18 @@
+// pages/api/blog/[slug].js (or src/pages/api/blog/[slug].ts with tweaks)
+
 import { Client } from "@notionhq/client";
 import { NotionAPI } from "notion-client";
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
-const databaseId = process.env.NOTION_DATABASE_ID;
+const dbId = process.env.NOTION_DATABASE_ID;
 
-// unofficial client (react-notion-x)
-const unofficialNotion = new NotionAPI();
+// Unofficial Notion API for full recordMap
+const unofficial = new NotionAPI({
+  fetchCollections: true,
+  fetchMissingBlocks: true,
+  fetchUsers: true,
+  recurseChildren: true,
+});
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -18,9 +25,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 1. Query DB for page
-    const dbResponse = await notion.databases.query({
-      database_id: databaseId,
+    // 1) Find page via database + slug
+    const dbResp = await notion.databases.query({
+      database_id: dbId,
       filter: {
         property: "Slug",
         rich_text: { equals: slug },
@@ -28,29 +35,27 @@ export default async function handler(req, res) {
       page_size: 1,
     });
 
-    if (!dbResponse.results.length) {
+    if (!dbResp.results.length) {
       return res.status(404).json({ error: "Post not found" });
     }
 
-    const page = dbResponse.results[0];
-    const props = page.properties || {};
+    const page = dbResp.results[0];
+    const props = page.properties;
 
-    // 2. Banner
+    // 2) Get full recordMap for this page
+    const recordMap = await unofficial.getPage(page.id);
+
+    console.log(
+      "🚀 BACKEND: Block count delivered:",
+      Object.keys(recordMap.block || {}).length
+    );
+
     const banner =
       props.Banner?.files?.[0]?.file?.url ||
       props.Banner?.files?.[0]?.external?.url ||
       null;
 
-    // 3. FULL RECORD MAP USING getPageRaw()
-    const { recordMap } = await unofficialNotion.getPageRaw(page.id);
-
-    console.log(
-      "Loaded full recordMap. Block count:",
-      Object.keys(recordMap.block).length
-    );
-
-    // 4. Send
-    return res.status(200).json({
+    const payload = {
       id: page.id,
       title: props.Title?.title?.[0]?.plain_text || "Untitled",
       slug: props.Slug?.rich_text?.[0]?.plain_text || "",
@@ -59,15 +64,16 @@ export default async function handler(req, res) {
       readTime: props["Read Time"]?.number
         ? `${props["Read Time"].number} min read`
         : "",
-      isNew: props.New?.checkbox ?? false,
       banner,
       recordMap,
-    });
+    };
+
+    return res.status(200).json(payload);
   } catch (error) {
-    console.error("Post fetch error:", error);
+    console.error("❌ Post fetch error:", error);
     return res.status(500).json({
       error: "Failed to fetch post",
-      details: error?.message || error,
+      details: error?.message || String(error),
     });
   }
 }
