@@ -56,9 +56,9 @@ export default {
 				}
 			},
 			fontFamily: {
-				sans: ['Instrument Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-				serif: ['Playfair Display', 'Georgia', 'Times New Roman', 'serif'],
-				mono: ['JetBrains Mono', 'Fira Code', 'ui-monospace', 'monospace'],
+				sans: ['ui-sans-serif', 'system-ui', 'sans-serif'],
+				serif: ['EB Garamond', 'Georgia', 'serif'],
+				mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
 			},
 			maxWidth: {
 				'content': 'var(--content-width)',
@@ -66,13 +66,13 @@ export default {
 				'narrow-content': 'var(--narrow-content-width)',
 			},
 			boxShadow: {
-				'soft': 'var(--shadow-soft)',
-				'medium': 'var(--shadow-medium)',
+				'soft': 'none',
+				'medium': 'none',
 			},
 			borderRadius: {
-				lg: 'var(--radius)',
-				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				lg: '0',
+				md: '0',
+				sm: '0'
 			},
 			keyframes: {
 				'accordion-down': {

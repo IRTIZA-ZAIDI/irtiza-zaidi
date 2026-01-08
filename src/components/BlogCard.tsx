@@ -8,28 +8,30 @@ interface BlogCardProps {
 
 const BlogCard = ({ title, excerpt, date, readTime, slug }: BlogCardProps) => {
   return (
-    <article className="group hover-lift">
-      <a href={`/blog/${slug}`} className="block">
-        <div className="bg-transparent border-b border-grey px-4 pt-6 pb-6 space-y-2 hover:shadow-md transition-shadow">
-          <h3 className="font-serif font-semibold text-xl text-foreground group-hover:text-accent transition-colors duration-200">
+    <article className="group h-full">
+      <a href={`/blog/${slug}`} className="block h-full">
+        <div className="flex flex-col h-full bg-transparent border border-foreground/10 hover:border-foreground/30 p-6 transition-all duration-300">
+          <div className="flex justify-between items-baseline mb-4">
+            <div className="flex items-center space-x-2 text-xs font-mono uppercase tracking-wider text-secondary">
+              <time dateTime={date}>
+                {new Date(date).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                })}
+              </time>
+              <span>/</span>
+              <span>{readTime}</span>
+            </div>
+          </div>
+
+          <h3 className="font-serif text-2xl text-foreground mb-4 group-hover:italic transition-all duration-300">
             {title}
           </h3>
-          
-          <p className="text-muted-foreground line-clamp-3 leading-relaxed">
+
+          <p className="text-secondary font-mono text-sm leading-relaxed line-clamp-3">
             {excerpt}
           </p>
-          
-          <div className="flex items-center space-x-4 text-sm text-accent">
-            <time dateTime={date}>
-              {new Date(date).toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-              })}
-            </time>
-            <span>•</span>
-            <span>{readTime}</span>
-          </div>
         </div>
       </a>
     </article>

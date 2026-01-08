@@ -52,32 +52,30 @@ const Index = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="min-h-screen bg-background font-sans selection:bg-black selection:text-white">
       <Header isHeroPage />
 
       {/* Hero Section */}
       <Hero />
 
       {/* Featured Blog Posts */}
-      <section className="bg-muted/30 relative min-h-screen flex items-center">
-        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 opacity-5 hidden lg:block"></div>
-
-        <div className="wide-container relative z-10">
+      <section className="py-24 md:py-32 border-t border-foreground/5">
+        <div className="container mx-auto px-6 md:px-12 max-w-6xl">
           <ScrollAnimation direction="up" delay={0.2}>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12 gap-4 md:gap-0 text-center md:text-left">
-              <h2 className="font-serif text-3xl font-semibold text-foreground">
+            <div className="flex flex-col md:flex-row md:items-baseline md:justify-between mb-20 gap-8">
+              <h2 className="font-serif text-4xl md:text-5xl text-foreground italic">
                 Recent Thoughts
               </h2>
               <a
                 href="/blog"
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-accent text-white font-sans font-medium hover:bg-primary/90 transition-colors"
+                className="group inline-flex items-center text-sm font-mono uppercase tracking-widest text-foreground hover:text-secondary transition-colors"
               >
                 View all posts
-                <ArrowRight className="ml-2 h-5 w-6" />
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
             </div>
 
-            <div className="space-y-12">
+            <div className="grid md:grid-cols-2 gap-12 md:gap-16">
               {featuredPosts.map((post) => (
                 <BlogCard
                   key={post.id}
@@ -94,21 +92,19 @@ const Index = () => {
       </section>
 
       {/* Featured Projects */}
-      <section className="relative min-h-screen flex items-center">
-        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 opacity-5 hidden lg:block"></div>
-
-        <div className="wide-container relative z-10">
+      <section className="py-24 md:py-32 border-t border-foreground/5">
+        <div className="container mx-auto px-6 md:px-12 max-w-6xl">
           <ScrollAnimation direction="up" delay={0.2}>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12 gap-4 md:gap-0 text-center md:text-left">
-              <h2 className="font-serif text-3xl font-semibold text-foreground">
+            <div className="flex flex-col md:flex-row md:items-baseline md:justify-between mb-20 gap-8">
+              <h2 className="font-serif text-4xl md:text-5xl text-foreground italic">
                 Featured Work
               </h2>
               <a
                 href="/Projects"
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-accent text-white font-sans font-medium hover:bg-primary/90 transition-colors"
+                className="group inline-flex items-center text-sm font-mono uppercase tracking-widest text-foreground hover:text-secondary transition-colors"
               >
                 View all projects
-                <ArrowRight className="ml-2 h-5 w-6" />
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
             </div>
             <div className="grid md:grid-cols-2 gap-8">
@@ -130,62 +126,57 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Latest Updates */}
-      <section className="bg-muted/30 min-h-screen flex items-center">
-        <div className="wide-container text-center">
+      {/* Latest Updates / About Small */}
+      <section className="py-24 md:py-32 border-t border-foreground/5">
+        <div className="container mx-auto px-6 md:px-12 max-w-4xl">
           <ScrollAnimation direction="up" delay={0.3}>
-            <h2 className="font-serif text-2xl font-semibold text-foreground mb-6">
-              Currently
-            </h2>
-            <div className="space-y-4 text-muted-foreground">
-              <p className="leading-relaxed">
-                Convincing LLMs to behave in production and making models spill
-                their secrets with interpretability tools
-              </p>
-              <p className="leading-relaxed">
-                Always open to discussions on AI interpretability, LLM
-                fine-tuning, and impactful ML solutions.
-              </p>
-            </div>
+            <div className="text-center space-y-12">
+              <h2 className="font-serif text-3xl md:text-4xl text-foreground italic">
+                Currently
+              </h2>
+              <div className="space-y-6 text-xl md:text-2xl font-serif text-secondary leading-relaxed">
+                <p>
+                  Convincing LLMs to behave in production and making models spill
+                  their secrets with interpretability tools.
+                </p>
+                <p>
+                  Always open to discussions on AI interpretability, LLM
+                  fine-tuning, and impactful ML solutions.
+                </p>
+              </div>
 
-            <div className="bg-muted rounded-lg p-8 text-center mt-6">
-              <p className="text-muted-foreground mb-6 leading-relaxed">
-                Always open to discussions on AI interpretability, LLM
-                fine-tuning, and impactful ML solutions.
-              </p>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
-                <Button asChild className="btn-accent font-sans">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
+                <Button asChild className="rounded-none border border-foreground bg-transparent text-foreground hover:bg-foreground hover:text-background transition-all font-mono uppercase tracking-wider h-12 px-8">
                   <a href="/contact">Get in Touch</a>
                 </Button>
-                <Button variant="outline" asChild className="font-sans">
+                <Button variant="outline" asChild className="rounded-none border border-foreground/20 text-secondary hover:text-foreground hover:border-foreground transition-all font-mono uppercase tracking-wider h-12 px-8">
                   <a
                     href="/resume.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     <Download className="mr-2 h-4 w-4" />
-                    Download Resume
+                    Cannot Define Me
                   </a>
                 </Button>
               </div>
 
-              <div className="flex items-center justify-center space-x-6">
+              <div className="flex items-center justify-center space-x-8 pt-8">
                 <a
                   href="mailto:zirtiza110@gmail.com"
-                  className="text-muted-foreground hover:text-accent transition-colors"
+                  className="text-foreground/60 hover:text-foreground transition-colors"
                 >
                   <Mail className="h-5 w-5" />
                 </a>
                 <a
                   href="https://www.linkedin.com/in/zirtiza/"
-                  className="text-muted-foreground hover:text-accent transition-colors"
+                  className="text-foreground/60 hover:text-foreground transition-colors"
                 >
                   <Linkedin className="h-5 w-5" />
                 </a>
                 <a
                   href="https://github.com/IRTIZA-ZAIDI"
-                  className="text-muted-foreground hover:text-accent transition-colors"
+                  className="text-foreground/60 hover:text-foreground transition-colors"
                 >
                   <Github className="h-5 w-5" />
                 </a>

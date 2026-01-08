@@ -40,81 +40,54 @@ export default function ProjectCard({
   const [hovered, setHovered] = useState(false);
   const fullDomain = domain.map((d) => domainMap[d] || d).join(" & ");
 
-  // Decide link → GitHub if exists, else internal page
   const projectLink = githubUrl || `/projects/${slug}`;
 
   return (
-    <motion.div
-      whileHover={{ scale: 1.02 }}
-      transition={{ duration: 0.45, ease: "easeInOut" }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <Card className="group relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-500 cursor-default bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 h-full flex flex-col">
-        {imageUrl && (
-          <img
-            src={imageUrl}
-            alt={title}
-            className="w-full h-40 object-cover rounded-t-2xl pointer-events-none"
-          />
-        )}
+    <div className="group border border-foreground/10 bg-transparent hover:border-foreground/40 transition-colors duration-300 h-full flex flex-col p-6 md:p-8">
+      <div className="flex flex-col h-full justify-between">
+        <div>
+          <div className="flex justify-between items-start mb-4">
+            <span className="text-xs text-muted-foreground uppercase tracking-wider">
+              {fullDomain}
+            </span>
+            {dataScienceLevel && dataScienceLevel.length > 0 && (
+              <span className="text-xs text-muted-foreground/60">
+                {dataScienceLevel.join(", ")}
+              </span>
+            )}
+          </div>
 
-        <CardContent className="p-5 flex flex-col flex-1">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+          <h3 className="text-2xl font-serif font-medium text-foreground mb-4 group-hover:italic transition-all">
             {title}
           </h3>
 
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-            {fullDomain}
+          <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+            {description}
           </p>
+        </div>
 
-          <div
-            className={`overflow-hidden transition-all duration-700 ease-in-out ${
-              hovered
-                ? "max-h-96 opacity-100 translate-y-0"
-                : "max-h-16 opacity-60 translate-y-1"
-            }`}
-          >
-            <p className="text-sm text-gray-700 dark:text-gray-300">
-              {description}
-            </p>
-          </div>
-
-          {dataScienceLevel && dataScienceLevel.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-2">
-              {dataScienceLevel.map((level, i) => (
-                <span
-                  key={i}
-                  className="inline-block text-xs font-medium px-3 py-1 rounded-full
-                    bg-blue-100 text-blue-700
-                    dark:bg-[hsl(340,80%,20%)]/50 dark:text-[hsl(340,80%,65%)]"
-                >
-                  {level}
-                </span>
-              ))}
-            </div>
-          )}
-
-          <div className="mt-3 flex flex-wrap gap-2">
+        <div>
+          <div className="flex flex-wrap gap-2 mb-6">
             {technologies.map((tech, i) => (
               <span
                 key={i}
-                className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-700 dark:bg-neutral-800 dark:text-gray-300"
+                className="text-[10px] px-2 py-1 rounded-full bg-muted text-muted-foreground border border-border"
               >
                 {tech}
               </span>
             ))}
           </div>
+
           <a
             href={projectLink}
-            target={githubUrl ? "_blank" : "_self"} // GitHub opens in new tab
+            target={githubUrl ? "_blank" : "_self"}
             rel="noopener noreferrer"
-            className="mt-4 inline-block text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
+            className="inline-block text-xs font-medium uppercase tracking-widest text-foreground border-b border-transparent hover:border-foreground transition-all pb-1"
           >
-            Open Project →
+            View Project
           </a>
-        </CardContent>
-      </Card>
-    </motion.div>
+        </div>
+      </div>
+    </div>
   );
 }
