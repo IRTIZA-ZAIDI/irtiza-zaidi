@@ -347,3 +347,10 @@ article.notion-content main {
 .dark .notion-content h4 {
   color: white;
 }
+
+/* Force monospace for Notion body text */
+#notion-container .notion-text,
+#notion-container .notion-paragraph,
+#notion-container .notion-list {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}

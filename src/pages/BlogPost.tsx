@@ -117,15 +117,14 @@ const BlogPost = () => {
       )}
 
       <main
-        className={`pb-16 flex justify-center px-4 sm:px-6 ${
-          !banner ? "pt-16" : ""
-        }`}
+        className={`pb-16 flex justify-center px-4 sm:px-6 ${!banner ? "pt-16" : ""
+          }`}
       >
         {" "}
         <div className="flex flex-col lg:flex-row max-w-7xl w-full mt-8 gap-12">
           {/* MAIN CONTENT */}
           <div className="flex-1">
-            <div className="wide-container p-1">
+            <div className="wide-container px-6 sm:px-8 lg:px-10">
               <Link
                 to="/blog"
                 className="font-sans inline-flex items-center text-muted-foreground hover:text-accent mb-8"
@@ -144,10 +143,10 @@ const BlogPost = () => {
                   <span>
                     {post.date
                       ? new Date(post.date).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
                       : "–"}
                   </span>
                 </div>
