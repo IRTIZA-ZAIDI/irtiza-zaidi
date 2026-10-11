@@ -1,7 +1,6 @@
 // pages/api/blog/[slug].js
 
 import { Client } from "@notionhq/client";
-import { NotionAPI } from "notion-client";
 
 export const config = {
   runtime: "nodejs",
@@ -10,13 +9,29 @@ export const config = {
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const dbId = process.env.NOTION_DATABASE_ID;
 
-// Unofficial Notion API for full recordMap
-const unofficial = new NotionAPI({
-  fetchCollections: true,
-  fetchMissingBlocks: true,
-  fetchUsers: true,
-  recurseChildren: true,
-});
+async function getBlockChildren(blockId) {
+  const blocks = [];
+  let cursor;
+
+  do {
+    const response = await notion.blocks.children.list({
+      block_id: blockId,
+      page_size: 100,
+      start_cursor: cursor,
+    });
+
+    for (const block of response.results) {
+      if (block.has_children) {
+        block.children = await getBlockChildren(block.id);
+      }
+      blocks.push(block);
+    }
+
+    cursor = response.has_more ? response.next_cursor : undefined;
+  } while (cursor);
+
+  return blocks;
+}
 
 export default async function handler(req, res) {
   // 🔥 HARD DISABLE CACHING (THIS FIXES YOUR ISSUE)
@@ -52,12 +67,12 @@ export default async function handler(req, res) {
     const page = dbResp.results[0];
     const props = page.properties;
 
-    // 2️⃣ Fetch full recordMap (unofficial API)
-    const recordMap = await unofficial.getPage(page.id);
+    // 2️⃣ Fetch body blocks via the official Notion API.
+    const blocks = await getBlockChildren(page.id);
 
     console.log(
       "🚀 BACKEND: Block count delivered:",
-      Object.keys(recordMap.block || {}).length
+      blocks.length
     );
 
     const banner =
@@ -75,7 +90,7 @@ export default async function handler(req, res) {
         ? `${props["Read Time"].number} min read`
         : "",
       banner,
-      recordMap,
+      blocks,
     };
 
     return res.status(200).json(payload);
